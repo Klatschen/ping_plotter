@@ -9,9 +9,17 @@ def pinging():
     while not e.isSet():
         ms = ping('google.de') * 1000
         print(str(ms) + ' ms')
-        recoreded_times.append(ms)
+        # recoreded_times.append(ms)
+        writeData(str(ms))
         time.sleep(2)
 
+def writeData(data):
+    with open("pings.txt", "a") as file:
+        file.write(data + "\n")
+
+def readData():
+    with open("pings.txt", "r") as file:
+        return file.readlines()
 
 recoreded_times = []
 
@@ -23,16 +31,23 @@ print('Press CTRL-C to interrupt')
 
 while thread.is_alive():
     try:
-        time.sleep(1)
+        time.sleep(3)
     except KeyboardInterrupt:
         e.set() # set flag
         print('Stopping ping..')
         thread.join()
 
-print('Performed ' + str(len(recoreded_times)) + ' requests')
-print(str(recoreded_times))
+recoreded_times = readData()
+float_times = []
 
-plotter.plot(recoreded_times)
+for time in recoreded_times:
+    tmp = time.replace("\n", "")
+    float_times.append(float(time))
+
+print('Performed ' + str(len(float_times)) + ' requests')
+print(str(float_times))
+
+plotter.plot(float_times)
 plotter.ylabel('Time in ms')
 plotter.xlabel('Number of ping')
 
