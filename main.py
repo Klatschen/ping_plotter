@@ -6,7 +6,7 @@ import matplotlib.pyplot as plotter
 from ping3 import ping
 
 def pinging():
-    while not e.isSet():
+    while not e.is_set():
         ms = ping('google.de') * 1000
         print(str(ms) + ' ms')
         # recoreded_times.append(ms)
